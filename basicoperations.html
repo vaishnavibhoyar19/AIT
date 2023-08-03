@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    input[type="number"] {
+      width: 60px;
+    }
+  </style>
+</head>
+<body>
+  <h2>Basic Operations and Array Manipulation</h2>
+
+  <label for="num1">Number 1:</label>
+  <input type="number" id="num1">
+
+  <label for="num2">Number 2:</label>
+  <input type="number" id="num2">
+
+  <button onclick="performOperations()">Perform Operations</button>
+
+  <p id="result"></p>
+
+  <script>
+    function performOperations() {
+      var num1 = parseFloat(document.getElementById('num1').value);
+      var num2 = parseFloat(document.getElementById('num2').value);
+
+      var sum = num1 + num2;
+      var difference = num1 - num2;
+      var product = num1 * num2;
+      var quotient = num1 / num2;
+
+      var numbersArray = [num1, num2];
+      var sortedArray = numbersArray.sort();
+      var reversedArray = numbersArray.reverse();
+
+      var result = 'Sum: ' + sum + '<br>';
+      result += 'Difference: ' + difference + '<br>';
+      result += 'Product: ' + product + '<br>';
+      result += 'Quotient: ' + quotient + '<br>';
+      result += 'Numbers Array: ' + numbersArray + '<br>';
+      result += 'Sorted Array: ' + sortedArray + '<br>';
+      result += 'Reversed Array: ' + reversedArray + '<br>';
+
+      document.getElementById('result').innerHTML = result;
+    }
+  </script>
+</body>
+</html>

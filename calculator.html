@@ -1,0 +1,26 @@
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'app-calculator',
+  templateUrl: './calculator.component.html',
+  styleUrls: ['./calculator.component.css']
+})
+export class CalculatorComponent {
+  result: string = '';
+
+  addToExpression(value: string | number) {
+    this.result += value.toString();
+  }
+
+  calculate() {
+    try {
+      this.result = eval(this.result);
+    } catch (error) {
+      this.result = 'Error';
+    }
+  }
+
+  clear() {
+    this.result = '';
+  }
+}

@@ -1,0 +1,118 @@
+<?php
+
+// Connect to the MySQL database
+$connection = mysqli_connect('localhost', 'username', 'password', 'database_name');
+
+// Check the connection
+if (mysqli_connect_errno()) {
+    echo "Failed to connect to MySQL: " . mysqli_connect_error();
+    exit();
+}
+
+// Perform the select operation
+function selectEmployees() {
+    global $connection;
+    
+    $query = "SELECT * FROM employees";
+    $result = mysqli_query($connection, $query);
+    
+    echo "<h2>Employee Information:</h2>";
+    echo "<table>";
+    echo "<tr><th>ID</th><th>Name</th><th>Email</th></tr>";
+    
+    while ($row = mysqli_fetch_assoc($result)) {
+        echo "<tr>";
+        echo "<td>".$row['id']."</td>";
+        echo "<td>".$row['name']."</td>";
+        echo "<td>".$row['email']."</td>";
+        echo "</tr>";
+    }
+    
+    echo "</table>";
+}
+
+// Perform the insert operation
+function insertEmployee($name, $email) {
+    global $connection;
+    
+    $name = mysqli_real_escape_string($connection, $name);
+    $email = mysqli_real_escape_string($connection, $email);
+    
+    $query = "INSERT INTO employees (name, email) VALUES ('$name', '$email')";
+    
+    if (mysqli_query($connection, $query)) {
+        echo "Employee inserted successfully!";
+    } else {
+        echo "Error inserting employee: " . mysqli_error($connection);
+    }
+}
+
+// Perform the delete operation
+function deleteEmployee($id) {
+    global $connection;
+    
+    $id = mysqli_real_escape_string($connection, $id);
+    
+    $query = "DELETE FROM employees WHERE id = '$id'";
+    
+    if (mysqli_query($connection, $query)) {
+        echo "Employee deleted successfully!";
+    } else {
+        echo "Error deleting employee: " . mysqli_error($connection);
+    }
+}
+
+// Handle form submissions
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if ($_POST['action'] === 'select') {
+        selectEmployees();
+    } elseif ($_POST['action'] === 'insert') {
+        $name = $_POST['name'];
+        $email = $_POST['email'];
+        insertEmployee($name, $email);
+    } elseif ($_POST['action'] === 'delete') {
+        $id = $_POST['id'];
+        deleteEmployee($id);
+    }
+}
+
+?>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Employee Management</title>
+</head>
+<body>
+    <h1>Employee Management System</h1>
+    
+    <h2>Select Employees:</h2>
+    <form method="post">
+        <input type="hidden" name="action" value="select">
+        <input type="submit" value="Select Employees">
+    </form>
+    
+    <h2>Add Employee:</h2>
+    <form method="post">
+        <input type="hidden" name="action" value="insert">
+        <label for="name">Name:</label>
+        <input type="text" name="name" id="name" required>
+        <label for="email">Email:</label>
+        <input type="email" name="email" id="email" required>
+        <input type="submit" value="Add Employee">
+    </form>
+    
+    <h2>Delete Employee:</h2>
+    <form method="post">
+        <input type="hidden" name="action" value="delete">
+        <label for="id">Employee ID:</label>
+        <input type="text" name="id" id="id" required>
+        <input type="submit" value="Delete Employee">
+    </form>
+</body>
+</html>
+
+<?php
+// Close the database connection
+mysqli_close($connection);
+?>
